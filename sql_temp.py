@@ -1,60 +1,29 @@
-import sqlite3
 import sys
+import utilities
 
-db_filename = 'database.db';
-
-
-def ConnectDatabase():
-    try:
-        sys.stdout.write('Attempting database connection... ')
-        sys.stdout.flush()
-        connection = sqlite3.connect(db_filename)
-        return connection
-    except:
-        print('Error B1: Database connection failed.')
-        exit(1)
-    finally:
-        print('Database connection successful.')
+conn = utilities.ConnectDatabase()
+cursor = conn.cursor()
 
 
 def CreateDatabase():
-    conn = ConnectDatabase()
-    cursor = conn.cursor()
-
     try:
         sys.stdout.write('Creating database... ')
         sys.stdout.flush()
         cursor.execute('''DROP TABLE IF EXISTS SouthernCities''')
-        cursor.execute(
-            '''CREATE TABLE SouthernCities (City VARCHAR(25), Country VARCHAR(25), Latitude DECIMAL(25), Longitude DECIMAL(25))''')
+        cursor.execute('''CREATE TABLE SouthernCities (City VARCHAR(25), Country VARCHAR(25), Latitude DECIMAL(25), Longitude DECIMAL(25))''')
         conn.commit()
-        conn.close()
+        print('Database creation successful.\n')
     except:
-        print('Error B2: Database connection failed.')
+        print('Error S1: Database connection failed.\n')
+        utilities.CloseDatabaseConnection(conn)
         exit(1)
-    finally:
-        print('Database creation successful... Database connection closed.\n')
 
 
 def InsertSouthernCitiesWorksheet():
-    conn = ConnectDatabase()
-    cursor = conn.cursor()
-
-    try:
-        sys.stdout.write('Loading Southern_Cities data... ')
-        sys.stdout.flush()
-        cursor.execute(
-            "SELECT City, Country, Latitude, Longitude FROM GlobalLandTemperaturesByMajorCity WHERE Latitude LIKE '%s'")
-        rows = cursor.fetchall()
-    except:
-        print('Error B4: Failed to load Major_City workbook.')
-        exit(1)
-    finally:
-        print('Southern_Cities data loaded successfully.')
-
     try:
         sys.stdout.write('Inserting Southern_Cities data into database... ')
         sys.stdout.flush()
+        rows = cursor.fetchall()
         for row in rows:
             _city = row[0]
             _country = row[1]
@@ -65,43 +34,49 @@ def InsertSouthernCitiesWorksheet():
             _values = (_city, _country, _latitude, _longitude)
 
             cursor.execute(_query, _values)
-
         conn.commit()
-        conn.close()
+        print('Data insert successful.\n')
     except:
-        print('Error B5: Failed to load Major_City workbook.')
+        print('Error S2: Failed to load Major_City workbook.\n')
+        utilities.CloseDatabaseConnection(conn)
         exit(1)
-    finally:
-        print('Data insert successful... Database connection closed.\n')
+
+
+def SelectSouthernCitiesData(_cursor):
+    try:
+        cursor = _cursor
+        sys.stdout.write('Loading Southern_Cities data... ')
+        sys.stdout.flush()
+        cursor.execute("SELECT City, Country, Latitude, Longitude FROM GlobalLandTemperaturesByMajorCity WHERE Latitude LIKE '%s'")
+        print('Southern_Cities data loaded successfully.\n')
+    except:
+        print('Error S3: Failed to load Major_City workbook.\n')
+        utilities.CloseDatabaseConnection(conn)
+        exit(1)
 
 
 def CalculateMaxMinAvg():
-    conn = ConnectDatabase()
-    cursor = conn.cursor()
-
     try:
         sys.stdout.write('Loading max, min, avg temperature data... ')
         sys.stdout.flush()
-        cursor.execute(
-            "SELECT MAX(AverageTemperature) FROM GlobalLandTemperaturesByState WHERE State = 'Queensland' AND EventDate LIKE '2000%'")
+        cursor.execute("SELECT MAX(AverageTemperature) FROM GlobalLandTemperaturesByState WHERE State = 'Queensland' AND EventDate LIKE '2000%'")
         maxTemp = cursor.fetchone()
-        cursor.execute(
-            "SELECT MIN(AverageTemperature) FROM GlobalLandTemperaturesByState WHERE State = 'Queensland' AND EventDate LIKE '2000%'")
+        cursor.execute("SELECT MIN(AverageTemperature) FROM GlobalLandTemperaturesByState WHERE State = 'Queensland' AND EventDate LIKE '2000%'")
         minTemp = cursor.fetchone()
-        cursor.execute(
-            "SELECT AVG(AverageTemperature) FROM GlobalLandTemperaturesByState WHERE State = 'Queensland' AND EventDate LIKE '2000%'")
+        cursor.execute("SELECT AVG(AverageTemperature) FROM GlobalLandTemperaturesByState WHERE State = 'Queensland' AND EventDate LIKE '2000%'")
         avgTemp = cursor.fetchone()
+        print('Max, min, avg data loaded successfully.\n')
     except:
-        print('Error B4: Failed to load Major_City workbook.')
+        print('Error S4: Failed to load Major_City workbook.\n')
+        utilities.CloseDatabaseConnection(conn)
         exit(1)
-    finally:
-        print('Max, min, avg data loaded successfully.')
 
     print('Maximum temperature', maxTemp[0])
     print('Minimum temperature', minTemp[0])
-    print('Average temperature', avgTemp[0])
+    print('Average temperature', avgTemp[0], '\n')
 
 
 CreateDatabase()
 InsertSouthernCitiesWorksheet()
 CalculateMaxMinAvg()
+utilities.CloseDatabaseConnection(conn)
