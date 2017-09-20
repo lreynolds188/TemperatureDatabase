@@ -5,10 +5,10 @@ import sys
 
 conn = utilities.ConnectDatabase()
 cursor = conn.cursor()
-wb_filename = 'World Temperature.xlsx'
+wb_filename = 'assets\World Temperature.xlsx'
 worldTemp_workbook = Workbook()
 worldTemp_worksheet = worldTemp_workbook.active
-worldTemp_lineChart = LineChart();
+worldTemp_lineChart = LineChart()
 
 
 def CreateWorkbook():
@@ -48,7 +48,6 @@ def CreateLineChart():
         exit(1)
 
 
-
 def SelectChinaTempData():
     try:
         sys.stdout.write('Selecting data from Temperatures_by_Country... ')
@@ -79,6 +78,15 @@ def InsertDataIntoWorkbook():
         print('Error E4: Data insert failed.\n')
         utilities.CloseDatabaseConnection(conn)
         exit(1)
+
+
+def Run():
+    CreateWorkbook()
+    SelectChinaTempData()
+    InsertDataIntoWorkbook()
+    CreateLineChart()
+    worldTemp_workbook.save(wb_filename)
+    utilities.CloseDatabaseConnection(conn)
 
 
 CreateWorkbook()

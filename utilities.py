@@ -3,7 +3,7 @@ import sys
 
 def ConnectDatabase():
     try:
-        db_filename = 'database.db';
+        db_filename = 'assets\database.db';
         sys.stdout.write('Attempting database connection... ')
         sys.stdout.flush()
         conn = sqlite3.connect(db_filename)
@@ -13,6 +13,7 @@ def ConnectDatabase():
         print('Error Util1: Database connection failed.\n')
         exit(1)
 
+
 def CloseDatabaseConnection(_connection):
     try:
         conn = _connection
@@ -21,4 +22,4 @@ def CloseDatabaseConnection(_connection):
         conn.close()
         print('Connection closed.')
     except:
-        print('Error Util2: Failed to close database connection.')
+        print('Error Util2: Failed to close database connection.\n')

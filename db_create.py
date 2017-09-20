@@ -7,7 +7,7 @@ cursor = conn.cursor()
 
 
 def CreateCountryWorkbook():
-    filename_country = 'Assets/GlobalLandTemperaturesByCountry.xlsx'
+    filename_country = 'assets/GlobalLandTemperaturesByCountry.xlsx'
 
     # Workbook 1
     sys.stdout.write('Loading Country workbook... ')
@@ -16,7 +16,7 @@ def CreateCountryWorkbook():
         workbook_country = load_workbook(filename_country)
         sheet_ranges_country = workbook_country.sheetnames
         sheet_country = workbook_country[sheet_ranges_country[0]]
-        print('Country workbook loaded successfully.\n')
+        print('Workbook load successful.\n')
         return sheet_country;
     except:
         print('Error C1: Failed to load Country workbook.\n')
@@ -25,7 +25,7 @@ def CreateCountryWorkbook():
 
 
 def CreateMajorCityWorkbook():
-    filename_major_city = 'Assets/GlobalLandTemperaturesByMajorCity.xlsx'
+    filename_major_city = 'assets/GlobalLandTemperaturesByMajorCity.xlsx'
 
     # Workbook 2
     sys.stdout.write('Loading Major_City workbook... ')
@@ -34,7 +34,7 @@ def CreateMajorCityWorkbook():
         workbook_major_city = load_workbook(filename_major_city)
         sheet_ranges_major_city = workbook_major_city.sheetnames
         sheet_major_city = workbook_major_city[sheet_ranges_major_city[0]]
-        print('Major_City workbook loaded successfully.\n')
+        print('Workbook load successful.\n')
         return sheet_major_city;
     except:
         print('Error C2: Failed to load Major_City workbook.\n')
@@ -43,7 +43,7 @@ def CreateMajorCityWorkbook():
 
 
 def CreateStateWorkbook():
-    filename_state = 'Assets/GlobalLandTemperaturesByState.xlsx'
+    filename_state = 'assets/GlobalLandTemperaturesByState.xlsx'
 
     sys.stdout.write('Loading State workbook... ')
     sys.stdout.flush()
@@ -51,7 +51,7 @@ def CreateStateWorkbook():
         workbook_state = load_workbook(filename_state)
         sheet_ranges_state = workbook_state.sheetnames
         sheet_state = workbook_state[sheet_ranges_state[0]]
-        print('State workbook loaded successfully.\n')
+        print('Workbook load successful.\n')
         return sheet_state;
     except:
         print('Error C3: Failed to load State workbook.\n')
@@ -93,7 +93,7 @@ def InsertCountryWorksheet(_worksheet):
         conn.commit()
         print('Data insert successful.\n')
     except:
-        print('Error C5: Country data insert failed.\n')
+        print('Error C5: Data insert failed.\n')
         utilities.CloseDatabaseConnection(conn)
         exit(1)
 
