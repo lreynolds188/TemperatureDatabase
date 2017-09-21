@@ -1,5 +1,5 @@
 # TemperatureDatabase
-Database creation and querying program
+Python database creation and querying program
 
 # application information
 __author__ = 'Luke Reynolds'

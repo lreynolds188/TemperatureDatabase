@@ -164,6 +164,7 @@ def PlotData():
     pyplot.plot(_vicYearArrNP, _vicTempArrNP, label='VIC')
     pyplot.plot(_waYearArrNP, _waTempArrNP, label='WA')
     pyplot.plot(_ausYearArrNP, _ausTempArrNP, label='AUS')
+    pyplot.title('Australian State and National Temperature Data')
     pyplot.legend(handler_map={actLine: HandlerLine2D(numpoints=4)}, bbox_to_anchor=(1, 1), loc=2)
     pyplot.ylabel('Temperature')
     pyplot.xlabel('Year')
