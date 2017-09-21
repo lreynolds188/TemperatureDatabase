@@ -77,6 +77,7 @@ def CalculateMaxMinAvg():
 
 
 CreateDatabase()
+SelectSouthernCitiesData(cursor)
 InsertSouthernCitiesWorksheet()
 CalculateMaxMinAvg()
 utilities.CloseDatabaseConnection(conn)

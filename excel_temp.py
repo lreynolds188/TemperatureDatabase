@@ -1,5 +1,6 @@
 from openpyxl import *
 from openpyxl.chart import *
+from openpyxl.chart.axis import DateAxis
 import utilities
 import sys
 
@@ -32,14 +33,17 @@ def CreateLineChart():
         sys.stdout.flush()
 
         # setup linechart
-        worldTemp_lineChart.title = "Line Chart"
-        worldTemp_lineChart.style = 13
+        worldTemp_lineChart.title = "China Temperature by Date"
+        worldTemp_lineChart.style = 12
         worldTemp_lineChart.y_axis.title = 'Temp'
-        worldTemp_lineChart.x_axis.title = 'Test Number'
+        worldTemp_lineChart.x_axis.title = 'Date'
+        worldTemp_lineChart.x_axis.tickLblPos = "low"
 
-        data = Reference(worldTemp_worksheet, min_col=1, min_row=1, max_col=1, max_row=2201)
+        data = Reference(worldTemp_worksheet, min_col=2, min_row=1, max_col=2, max_row=2200)
         worldTemp_lineChart.add_data(data, titles_from_data=True)
-        worldTemp_worksheet.add_chart(worldTemp_lineChart, "B1")
+        dates = Reference(worldTemp_worksheet, min_col=1, min_row=1, max_col=1, max_row=2200)
+        worldTemp_lineChart.set_categories(dates)
+        worldTemp_worksheet.add_chart(worldTemp_lineChart, "C1")
 
         print('Creation successful.\n')
     except:
@@ -53,7 +57,7 @@ def SelectChinaTempData():
         sys.stdout.write('Selecting data from Temperatures_by_Country... ')
         sys.stdout.flush()
 
-        _query = "SELECT AverageTemperature FROM GlobalLandTemperaturesByCountry WHERE Country = 'China' AND AverageTemperature != 'NULL' ORDER BY AverageTemperature"
+        _query = "SELECT SUBSTR(EventDate, 0, 5) as Year, AverageTemperature FROM GlobalLandTemperaturesByCountry WHERE Country = 'China' AND AverageTemperature != 'NULL' ORDER BY Year"
         cursor.execute(_query)
 
         print('Data select successful.\n')
