@@ -81,7 +81,7 @@ def InsertCountryWorksheet(_worksheet):
     try:
         sys.stdout.write('Inserting Country data into database... ')
         sys.stdout.flush()
-        for row in _worksheet.iter_rows():
+        for row in _worksheet.iter_rows(min_row=2):
             _date = row[0].value
             _averageTemp = row[1].value
             _averageTempUncertain = row[2].value
@@ -102,7 +102,7 @@ def InsertMajorCityWorksheet(_worksheet):
     try:
         sys.stdout.write('Inserting Major_City data into database... ')
         sys.stdout.flush()
-        for row in _worksheet.iter_rows():
+        for row in _worksheet.iter_rows(min_row=2):
             _date = row[0].value
             _averageTemp = row[1].value
             _averageTempUncertain = row[2].value
@@ -127,7 +127,7 @@ def InsertStateWorksheet(_worksheet):
     try:
         sys.stdout.write('Inserting State data into database... ')
         sys.stdout.flush()
-        for row in _worksheet.iter_rows():
+        for row in _worksheet.iter_rows(min_row=2):
             _date = row[0].value
             _averageTemp = row[1].value
             _averageTempUncertain = row[2].value
@@ -146,14 +146,14 @@ def InsertStateWorksheet(_worksheet):
         exit(1)
 
 
-CreateDatabase();
+CreateDatabase()
 
-country_worksheet = CreateCountryWorkbook();
-majorCity_worksheet = CreateMajorCityWorkbook();
-state_worksheet = CreateStateWorkbook();
+country_worksheet = CreateCountryWorkbook()
+majorCity_worksheet = CreateMajorCityWorkbook()
+state_worksheet = CreateStateWorkbook()
 
-InsertCountryWorksheet(country_worksheet);
-InsertMajorCityWorksheet(majorCity_worksheet);
-InsertStateWorksheet(state_worksheet);
+InsertCountryWorksheet(country_worksheet)
+InsertMajorCityWorksheet(majorCity_worksheet)
+InsertStateWorksheet(state_worksheet)
 
 utilities.CloseDatabaseConnection(conn)
